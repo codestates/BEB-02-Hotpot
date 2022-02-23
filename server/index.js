@@ -1,46 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const session = require('express-session');
-const accountRouter = require('./routes/account');
-require('dotenv').config();
-
+const express = require("express");
+const router = express.Router();
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const routesURLs = require("./routes/routes");
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
+const port = PORT || 8888;
 
-//server 설정
-app.use(
-    session({
-        secret: '@hotpot',
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            domain: 'localhost',
-            path: '/',
-            maxAge: 24 * 6 * 60 * 10000,
-            sameSite: 'None',
-            httpOnly: true,
-            secure: true,
-        },
-    })
-);
+dotenv.config();
+mongoose.connect(process.env.DB_URI, () => console.log("DB 연결됨"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-const corsOption = {
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS']
-}
-app.use(cors(corsOption));
-
-app.get('/', (req, res) => {
-    res.send('Welcome to our server!');
+app.use(cors());
+app.use("/", routesURLs);
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
 });
-
-//router
-//app.use('/account', accountRouter);
-
-
-app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
-});
-
-module.exports = app;
