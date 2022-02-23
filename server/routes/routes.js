@@ -3,6 +3,7 @@ const router = express.Router();
 const Web3 = require("web3");
 const mongoose = require("mongoose");
 const signUpForm = require("../forms/SignupForm");
+const e = require('express');
 
 router.post("/signup", (req, res) => {
   const { username, password } = req.body;
@@ -27,5 +28,31 @@ router.post("/signup", (req, res) => {
       });
     }
   });
+});
+
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  console.log(password)
+  signUpForm.findOne({ username, username }, (err, user) => {
+    if (user) {
+      if (user.password === password) {
+        res.send({
+          message: "로그인 성공",
+          data: user
+        });
+      } else {
+        res.send({
+          message: "비밀번호를 잘못 입력하셨습니다.",
+          data: null
+        });
+      }
+    } else {
+      res.send({
+        message: "존재하지 않는 아이디 입니다.",
+        data: null
+      });
+    }
+  })
+
 });
 module.exports = router;
