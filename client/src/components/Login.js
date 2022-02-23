@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 
 const Login = ({ open, close }) => {
@@ -12,6 +13,24 @@ const Login = ({ open, close }) => {
     const onChangePassword = (e) => {
         setPassword(e.target.value);
     };
+
+    const reqLogin = async () => {
+        const loginURL = "http://localhost:8888/login"
+        await axios.post(loginURL, {
+            username: email,
+            password: password
+        })
+            .then((res) => {
+                if (res.data.data) {
+                    //status로 정보 저장하기
+                    console.log(res)
+                    close();
+                } else {
+                    alert(res.data.message);
+                }
+            })
+            .catch((e) => console.log(e));
+    }
 
     return (
         <div className={open ? "modal-wrapper" : null}>
@@ -38,7 +57,7 @@ const Login = ({ open, close }) => {
                             />
                         </div>
                         <div className="button-wrapper">
-                            <button className="modal-button" onClick={() => {/*Todo */ }}>
+                            <button className="modal-button" onClick={() => reqLogin()}>
                                 로그인
                             </button>
                             <button className="modal-button" onClick={close}>

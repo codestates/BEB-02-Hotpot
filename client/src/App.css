@@ -13,10 +13,14 @@ body {
 }
 
 #menu {
-  margin: 1.5rem;
+  margin: 2rem;
   right: 0;
-  font-weight: 300;
+  font-weight: normal;
   position: absolute;
+}
+
+#signup {
+  margin: 0.6rem;
 }
 
 #nav-body {
@@ -123,6 +127,17 @@ body {
   font-size: 13px;
 }
 
+.nav-buttton {
+  margin: -2px 0 0 4px;
+  padding: 2px 7px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 7px;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 @keyframes modal-show {
   from {
     opacity: 0;
@@ -140,4 +155,16 @@ body {
   to {
     opacity: 1;
   }
+}
+a:link {
+  color: rgb(255, 255, 255);
+}
+a:visited {
+  color: rgb(255, 255, 255);
+}
+a:hover {
+  color: rgb(255, 255, 255);
+}
+a:active {
+  color: rgb(255, 255, 255);
 }
