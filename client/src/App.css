@@ -127,6 +127,17 @@ body {
   font-size: 13px;
 }
 
+.nav-buttton {
+  margin: -2px 0 0 4px;
+  padding: 2px 7px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 7px;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 @keyframes modal-show {
   from {
     opacity: 0;
