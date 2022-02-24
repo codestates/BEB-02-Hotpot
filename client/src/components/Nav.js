@@ -1,9 +1,18 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { logOut } from '../actions/index';
 import Login from "./Login";
 import { Link } from "react-router-dom";
 
 function Nav() {
+  const account = useSelector(state => state.accountReducer);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(logOut());
+  }
+
   return (
     <div id="nav-body">
       <span id="title">
@@ -20,9 +29,14 @@ function Nav() {
             회원가입
           </Link>
         </span>
-        <button className="nav-buttton" onClick={() => setOpen(true)}>
-          로그인
-        </button>
+        {account.isLogin
+          ? (<button className="nav-buttton" onClick={() => handleLogout()}>
+            로그아웃
+          </button>)
+          : (<button className="nav-buttton" onClick={() => setOpen(true)}>
+            로그인
+          </button>)}
+
         <Login open={open} close={() => setOpen(!open)} />
       </div>
     </div>

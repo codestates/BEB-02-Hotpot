@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { logIn } from '../actions/index';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 
 const Login = ({ open, close }) => {
+    const account = useSelector(state => state.accountReducer);
+    const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -22,8 +26,7 @@ const Login = ({ open, close }) => {
         })
             .then((res) => {
                 if (res.data.data) {
-                    //status로 정보 저장하기
-                    console.log(res)
+                    dispatch(logIn(res.data.data));
                     close();
                 } else {
                     alert(res.data.message);
