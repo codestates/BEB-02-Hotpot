@@ -1,5 +1,6 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,8 +11,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
 const columns = [
-  { id: "id", label: "", width: 50 },
-  { id: "title", label: "제목", minWidth: 400 },
+  { id: "title", label: "제목", width: 400 },
   { id: "writtenby", label: "작성자", width: 120 },
   {
     id: "createdat",
@@ -21,32 +21,32 @@ const columns = [
   { id: "viewed", label: "조회", width: 50 },
 ];
 
-function createData(id, title, writtenby, createdat, viewed) {
-  return { id, title, writtenby, createdat, viewed };
+function createData(title, writtenby, createdat, viewed) {
+  return { title, writtenby, createdat, viewed };
 }
 
-const rows = [
-  createData("1", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("2", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("3", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("4", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("5", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("6", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("7", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("8", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("9", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("10", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("11", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("12", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("13", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("14", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("15", "Hotpot community", "마라탕", "2022.02.23", "123"),
-  createData("16", "Hotpot community", "마라탕", "2022.02.23", "123"),
-];
-
 export default function Community() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    async function reqData() {
+      await axios
+        .get("http://localhost:8888/")
+        .then((res) => {
+          let _rows = res.data.map((data) => ({
+            title: data.title,
+            writtenby: data.username,
+            createdat: data.date,
+            viewsed: data.viewed,
+          }));
+          setRows(rows.concat(_rows));
+        })
+        .catch((e) => console.log(e));
+    }
+    reqData();
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -71,7 +71,7 @@ export default function Community() {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ width: column.width }}
                 >
                   {column.label}
                 </TableCell>
