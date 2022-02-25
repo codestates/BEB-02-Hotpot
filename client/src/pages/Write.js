@@ -1,5 +1,8 @@
 import { React, useState } from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 95%;
@@ -26,6 +29,8 @@ const Enter = styled.button`
 export default function Write() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const navigate = useNavigate();
+  const account = useSelector((state) => state.accountReducer);
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -33,6 +38,29 @@ export default function Write() {
 
   const onChangeContent = (e) => {
     setContent(e.target.value);
+  };
+
+  const save = async () => {
+    // console.log("title= " + title);
+    // console.log(account.account.username);
+    // console.log("content= " + content);
+    if (title && content && account.account.username) {
+      await axios
+        .post("http://localhost:8888/newcontent", {
+          title,
+          content,
+          username: account.account.username,
+        })
+        .then((res) => {
+          console.log(res.data);
+          alert(res.data.message);
+          navigate("/");
+        });
+    } else if (!account.account.username)
+      alert("게시글은 로그인 후 작성이 가능합니다.");
+    else {
+      alert("제목과 내용을 입력해주세요.");
+    }
   };
 
   return (
@@ -49,7 +77,7 @@ export default function Write() {
           placeholder="내용을 입력하세요."
           onChange={onChangeContent}
         ></Content>
-        <Enter>등록</Enter>
+        <Enter onClick={save}>등록</Enter>
       </Container>
     </div>
   );
