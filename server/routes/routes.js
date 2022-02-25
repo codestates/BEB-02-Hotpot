@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const crypto = require('crypto-js');
 const Web3 = require("web3");
 const mongoose = require("mongoose");
 const signUpForm = require("../forms/SignupForm");
-const e = require('express');
 
 router.post("/signup", (req, res) => {
   const { username, password } = req.body;
@@ -11,9 +11,12 @@ router.post("/signup", (req, res) => {
     if (user) {
       res.send({ message: "이미 있는 유저입니다." });
     } else {
+      const salt = Math.random().toString(36).substring(2, 11);
+      const encryptPw = crypto.SHA256(password + salt).toString();
       const user = new signUpForm({
         username,
-        password,
+        password: encryptPw,
+        salt,
       });
       console.log("user" + user);
 
@@ -32,10 +35,11 @@ router.post("/signup", (req, res) => {
 
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
-  console.log(password)
   signUpForm.findOne({ username, username }, (err, user) => {
     if (user) {
-      if (user.password === password) {
+      const salt = user.salt;
+      const encryptPw = crypto.SHA256(password + salt).toString();
+      if (user.password === encryptPw) {
         res.send({
           message: "로그인 성공",
           data: user
