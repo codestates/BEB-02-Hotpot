@@ -3,7 +3,8 @@ const router = express.Router();
 const Web3 = require("web3");
 const mongoose = require("mongoose");
 const signUpForm = require("../forms/SignupForm");
-const e = require('express');
+const addNewContent = require("../forms/Newcontent");
+const e = require("express");
 
 router.post("/signup", (req, res) => {
   const { username, password } = req.body;
@@ -32,27 +33,52 @@ router.post("/signup", (req, res) => {
 
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
-  console.log(password)
+  console.log(password);
   signUpForm.findOne({ username, username }, (err, user) => {
     if (user) {
       if (user.password === password) {
         res.send({
           message: "로그인 성공",
-          data: user
+          data: user,
         });
       } else {
         res.send({
           message: "비밀번호를 잘못 입력하셨습니다.",
-          data: null
+          data: null,
         });
       }
     } else {
       res.send({
         message: "존재하지 않는 아이디 입니다.",
-        data: null
+        data: null,
       });
     }
-  })
-
+  });
 });
+
+router.post("/newcontent", (req, res) => {
+  const { title, content, username } = req.body;
+  const newcontent = new addNewContent({ username, title, content });
+
+  newcontent.save((err) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({
+        message: "게시물이 등록되었습니다.",
+      });
+    }
+  });
+});
+
+router.get("/", (req, res) => {
+  addNewContent.find({}, (err, contents) => {
+    console.log(contents);
+    if (err) res.send(err);
+    else {
+      res.send(contents);
+    }
+  });
+});
+
 module.exports = router;
