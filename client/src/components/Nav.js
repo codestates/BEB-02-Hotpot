@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { logOut } from '../actions/index';
+import { useSelector, useDispatch } from "react-redux";
+import { logOut } from "../actions/index";
 import Login from "./Login";
 import { Link } from "react-router-dom";
+import ConnectWallet from "./ConnectWallet";
 
-function Nav() {
-  const account = useSelector(state => state.accountReducer);
+function Nav({ connectWallet }) {
+  const account = useSelector((state) => state.accountReducer);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logOut());
-  }
+  };
 
   return (
     <div id="nav-body">
@@ -29,15 +30,21 @@ function Nav() {
             회원가입
           </Link>
         </span>
-        {account.isLogin
-          ? (<button className="nav-buttton" onClick={() => handleLogout()}>
+        {account.isLogin ? (
+          <button className="nav-buttton" onClick={() => handleLogout()}>
             로그아웃
-          </button>)
-          : (<button className="nav-buttton" onClick={() => setOpen(true)}>
+          </button>
+        ) : (
+          <button className="nav-buttton" onClick={() => setOpen(true)}>
             로그인
-          </button>)}
+          </button>
+        )}
 
         <Login open={open} close={() => setOpen(!open)} />
+        {/* <Link to="/wallet" style={{ textDecoration: "none" }}> */}
+        <span>
+          <ConnectWallet className="navIcon" connectWallet={connectWallet} />
+        </span>
       </div>
     </div>
   );
