@@ -25,6 +25,11 @@ function Nav({ connectWallet }) {
         </span>
       </span>
       <div id="menu">
+        <span id="exchange">
+          <Link to="/exchange" style={{ textDecoration: "none" }}>
+            NFT
+          </Link>
+        </span>
         <span id="signup">
           <Link to="/signup" style={{ textDecoration: "none" }}>
             회원가입

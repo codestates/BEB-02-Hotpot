@@ -1,11 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require('crypto-js');
-const Web3 = require("web3");
-const mongoose = require("mongoose");
 const signUpForm = require("../forms/SignupForm");
 const addNewContent = require("../forms/Newcontent");
-const e = require("express");
 
 router.post("/signup", (req, res) => {
   const { username, password } = req.body;
