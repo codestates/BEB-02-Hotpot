@@ -4,6 +4,7 @@ import Web3 from "web3";
 import Community from "./pages/Community";
 import SignUp from "./pages/Signup";
 import Exchange from "./pages/Exchange";
+import Transfer from "./pages/Transfer";
 import Nav from "./components/Nav";
 import Write from "./pages/Write";
 import ConnectWallet from "./components/ConnectWallet";
@@ -29,6 +30,8 @@ function App() {
       method: "eth_requestAccounts",
     });
     setAccount(accounts[0]);
+    console.log(accounts[0]);
+    alert(accounts[0]);
   };
   return (
     <Router>
@@ -38,6 +41,10 @@ function App() {
         <Route path="/signup" element={<SignUp account={account} />} />
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/write" element={<Write />} />
+        <Route
+          path="/transfer"
+          element={<Transfer web3={web3} account={account} />}
+        />
       </Routes>
     </Router>
   );

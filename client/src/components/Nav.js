@@ -36,7 +36,7 @@ function Nav({ connectWallet }) {
           </Link>
         </span>
         <span id="connect-button">
-          <button className='nav-button' onClick={() => connectWallet()}>
+          <button className="nav-button" onClick={() => connectWallet()}>
             지갑 연결
           </button>
         </span>
@@ -53,9 +53,11 @@ function Nav({ connectWallet }) {
         </span>
 
         <Login open={open} close={() => setOpen(!open)} />
-        {/*<span>
-          <ConnectWallet className="navIcon" connectWallet={connectWallet} />
-        </span>*/}
+        <span>
+          <Link to="/transfer" style={{ textDecoration: "none" }}>
+            토큰전송
+          </Link>
+        </span>
       </div>
     </div>
   );
