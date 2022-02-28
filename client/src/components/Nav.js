@@ -25,25 +25,37 @@ function Nav({ connectWallet }) {
         </span>
       </span>
       <div id="menu">
+        <span id="exchange">
+          <Link to="/exchange" style={{ textDecoration: "none" }}>
+            NFT
+          </Link>
+        </span>
         <span id="signup">
           <Link to="/signup" style={{ textDecoration: "none" }}>
             회원가입
           </Link>
         </span>
-        {account.isLogin ? (
-          <button className="nav-buttton" onClick={() => handleLogout()}>
-            로그아웃
+        <span id="connect-button">
+          <button className='nav-button' onClick={() => connectWallet()}>
+            지갑 연결
           </button>
-        ) : (
-          <button className="nav-buttton" onClick={() => setOpen(true)}>
-            로그인
-          </button>
-        )}
+        </span>
+        <span id="login">
+          {account.isLogin ? (
+            <button className="nav-button" onClick={() => handleLogout()}>
+              로그아웃
+            </button>
+          ) : (
+            <button className="nav-button" onClick={() => setOpen(true)}>
+              로그인
+            </button>
+          )}
+        </span>
 
         <Login open={open} close={() => setOpen(!open)} />
-        <span>
+        {/*<span>
           <ConnectWallet className="navIcon" connectWallet={connectWallet} />
-        </span>
+        </span>*/}
       </div>
     </div>
   );

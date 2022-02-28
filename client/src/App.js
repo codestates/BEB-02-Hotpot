@@ -32,22 +32,12 @@ function App() {
   };
   return (
     <Router>
-      <Nav />
+      <Nav connectWallet={connectWallet} />
       <Routes>
         <Route path="/" element={<Community />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp account={account} />} />
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/write" element={<Write />} />
-        <Route
-          path="/wallet"
-          element={
-            <ConnectWallet
-              web3={web3}
-              account={account}
-              connectWallet={connectWallet}
-            />
-          }
-        />
       </Routes>
     </Router>
   );
