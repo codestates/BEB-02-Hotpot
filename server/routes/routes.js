@@ -6,37 +6,41 @@ const addNewContent = require("../forms/Newcontent");
 
 router.post("/signup", (req, res) => {
   const { email, username, password, address } = req.body;
-
-  signUpForm.findOne({ username: username }, (err, user) => {
-    if (user) res.send({ message: "이미 존재하는 닉네임입니다." });
-  })
-
-  signUpForm.findOne({ email: email }, (err, user) => {
+  signUpForm.findOne({ username, username }, (err, user) => {
     if (user) {
-      res.send({ message: "이미 있는 유저입니다." });
+      res.send({ message: "이미 존재하는 닉네임입니다.", success: false })
     } else {
-      const salt = Math.random().toString(36).substring(2, 11);
-      const encryptPw = crypto.SHA256(password + salt).toString();
-      const user = new signUpForm({
-        email,
-        username,
-        password: encryptPw,
-        address,
-        salt,
-      });
-      console.log("user" + user);
-
-      user.save((err) => {
-        if (err) {
-          res.send(err);
+      signUpForm.findOne({ email: email }, (err, user) => {
+        if (user) {
+          res.send({ message: "이미 있는 유저입니다.", success: false });
         } else {
-          res.send({
-            message: "회원가입이 완료되었습니다. 로그인해주세요.",
+          const salt = Math.random().toString(36).substring(2, 11);
+          const encryptPw = crypto.SHA256(password + salt).toString();
+          const user = new signUpForm({
+            email,
+            username,
+            password: encryptPw,
+            address,
+            salt,
+          });
+          console.log("user" + user);
+
+          user.save((err) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send({
+                message: "회원가입이 완료되었습니다. 로그인해주세요.",
+                success: true
+              });
+            }
           });
         }
       });
     }
-  });
+  })
+
+
 });
 
 router.post("/login", (req, res) => {

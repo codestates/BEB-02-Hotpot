@@ -11,14 +11,14 @@ const SignUp = ({ account }) => {
     username: "",
     password: "",
     confirmPassword: "",
-    address: "",
+    address: account,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({
       ...user,
-      [name]: value,
+      [name]: value
     });
     console.log("user=" + value);
   };
@@ -29,7 +29,9 @@ const SignUp = ({ account }) => {
     if (email && username && password && address && password === confirmPassword) {
       await axios.post("http://localhost:8888/signup", user).then((res) => {
         alert(res.data.message);
-        navigate("/");
+        if (res.data.success) {
+          navigate("/");
+        }
       });
     } else {
       alert("정보를 모두 기입해주세요.");
@@ -136,7 +138,7 @@ const SignUp = ({ account }) => {
           onClick={check}
         ></input>
       </div>*/}
-    </div>
+    </div >
   );
 };
 
