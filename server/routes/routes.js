@@ -5,16 +5,23 @@ const signUpForm = require("../forms/SignupForm");
 const addNewContent = require("../forms/Newcontent");
 
 router.post("/signup", (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password, address } = req.body;
+
   signUpForm.findOne({ username: username }, (err, user) => {
+    if (user) res.send({ message: "이미 존재하는 닉네임입니다." });
+  })
+
+  signUpForm.findOne({ email: email }, (err, user) => {
     if (user) {
       res.send({ message: "이미 있는 유저입니다." });
     } else {
       const salt = Math.random().toString(36).substring(2, 11);
       const encryptPw = crypto.SHA256(password + salt).toString();
       const user = new signUpForm({
+        email,
         username,
         password: encryptPw,
+        address,
         salt,
       });
       console.log("user" + user);
@@ -33,9 +40,8 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  console.log(password);
-  signUpForm.findOne({ username, username }, (err, user) => {
+  const { email, password } = req.body;
+  signUpForm.findOne({ email, email }, (err, user) => {
     if (user) {
       const salt = user.salt;
       const encryptPw = crypto.SHA256(password + salt).toString();
@@ -52,7 +58,7 @@ router.post("/login", (req, res) => {
       }
     } else {
       res.send({
-        message: "존재하지 않는 아이디 입니다.",
+        message: "존재하지 않는 계정 입니다.",
         data: null,
       });
     }

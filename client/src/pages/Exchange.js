@@ -1,4 +1,3 @@
-import '../exchange.css';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadExchange } from '../actions/index';
