@@ -24,14 +24,8 @@ const signupForm = new mongoose.Schema({
   date: {
     type: String,
     default: function () {
-      let now = new Date();
-      let date = new Date(now)
-        .toISOString()
-        .split("T")[0];
-      let time = new Date(now)
-        .toTimeString()
-        .split(" ")[0];
-
+      let date = new Date().toISOString().split("T")[0];
+      let time = new Date().toTimeString().split(" ")[0];
       return date + " " + time;
     }
   },
