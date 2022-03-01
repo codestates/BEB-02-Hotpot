@@ -40,16 +40,6 @@ function App() {
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/write" element={<Write />} />
         <Route path="/content/:id" element={<Post />} />
-        <Route
-          path="/wallet"
-          element={
-            <ConnectWallet
-              web3={web3}
-              account={account}
-              connectWallet={connectWallet}
-            />
-          }
-        />
       </Routes>
     </Router>
   );
