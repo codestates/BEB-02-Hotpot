@@ -33,10 +33,10 @@ function App() {
   };
   return (
     <Router>
-      <Nav />
+      <Nav connectWallet={connectWallet} />
       <Routes>
         <Route path="/" element={<Community />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp account={account} />} />
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/write" element={<Write />} />
         <Route path="/content/:id" element={<Post />} />
