@@ -17,7 +17,11 @@ const Title = styled.input`
   margin-top: 0.5em;
 `;
 
-const Content = styled(Title)`
+const Content = styled.textarea`
+  width: 95%;
+  height: 40px;
+  border-radius: 8px;
+  margin-top: 0.5em;
   min-height: 40vh;
 `;
 

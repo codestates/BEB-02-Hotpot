@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const crypto = require('crypto-js');
+const crypto = require("crypto-js");
 const Web3 = require("web3");
 const mongoose = require("mongoose");
 const signUpForm = require("../forms/SignupForm");
-const addNewContent = require("../forms/Newcontent");
+const addNewContent = require("../forms/NewContent");
+const addNewComment = require("../forms/NewComment");
 const e = require("express");
 
 router.post("/signup", (req, res) => {
@@ -79,10 +80,25 @@ router.post("/newcontent", (req, res) => {
 
 router.get("/", (req, res) => {
   addNewContent.find({}, (err, contents) => {
-    console.log(contents);
     if (err) res.send(err);
     else {
       res.send(contents);
+    }
+  });
+});
+
+router.post("/newcomment", (req, res) => {
+  const { contentid, comment, username } = req.body;
+  const newcomment = new addNewComment({ contentid, username, comment });
+
+  console.log(req.body);
+  newcomment.save((err) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({
+        message: "댓글이 등록되었습니다.",
+      });
     }
   });
 });

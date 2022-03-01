@@ -7,6 +7,7 @@ import Exchange from "./pages/Exchange";
 import Nav from "./components/Nav";
 import Write from "./pages/Write";
 import ConnectWallet from "./components/ConnectWallet";
+import Post from "./pages/Post";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/write" element={<Write />} />
+        <Route path="/content/:id" element={<Post />} />
         <Route
           path="/wallet"
           element={
