@@ -5,7 +5,8 @@ import Community from "./pages/Community";
 import SignUp from "./pages/Signup";
 import Exchange from "./pages/Exchange";
 import Transfer from "./pages/Transfer";
-import Nav from "./components/Nav";
+import Nav from "./components/Nav"
+import Login from "./pages/Login";
 import Write from "./pages/Write";
 import ConnectWallet from "./components/ConnectWallet";
 import Post from "./pages/Post";
@@ -40,6 +41,7 @@ function App() {
       <Nav connectWallet={connectWallet} />
       <Routes>
         <Route path="/" element={<Community />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp account={account} />} />
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/write" element={<Write />} />
