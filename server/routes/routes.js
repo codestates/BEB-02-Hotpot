@@ -108,4 +108,14 @@ router.post("/newcomment", (req, res) => {
   });
 });
 
+router.get("/content/:id", (req, res) => {
+  const { contentid } = req.query;
+  addNewComment.find({ contentid: contentid }, (err, contents) => {
+    if (err) res.send(err);
+    else {
+      res.send(contents);
+    }
+  });
+});
+
 module.exports = router;

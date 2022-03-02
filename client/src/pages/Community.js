@@ -18,7 +18,7 @@ const columns = [
     label: "작성일",
     width: 120,
   },
-  { id: "viewed", label: "조회", width: 50 },
+  { id: "viewed", label: "조회", width: 50, align: "center" },
 ];
 
 export default function Community() {
@@ -82,18 +82,24 @@ export default function Community() {
               .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    <Link to={`/content/${row.id}`} state={{ data: row }}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return column.id == "title" ? (
+                        <Link to={`/content/${row.id}`} state={{ data: row }}>
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            width={850}
+                          >
+                            {value}
                           </TableCell>
-                        );
-                      })}
-                    </Link>
+                        </Link>
+                      ) : (
+                        <TableCell key={column.id} align={column.align}>
+                          {value}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
                 );
               })}

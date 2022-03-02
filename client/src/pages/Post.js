@@ -47,7 +47,7 @@ export default function Post() {
       </Contentdiv>
       <Divider />
       <NewComment contentid={data.id} />
-      <CommentsList />
+      <CommentsList contentid={data.id} />
     </Container>
   );
 }

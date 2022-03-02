@@ -36,6 +36,7 @@ export default function NewComment({ contentid }) {
         .then((res) => {
           console.log(res.data);
           alert(res.data.message);
+          window.location.reload();
         });
     } else if (!account.account.username) alert("로그인 후 작성해주세요.");
     else alert("내용을 입력해주세요.");
