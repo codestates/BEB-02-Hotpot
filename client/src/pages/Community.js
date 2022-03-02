@@ -18,12 +18,8 @@ const columns = [
     label: "작성일",
     width: 120,
   },
-  { id: "viewed", label: "조회", width: 50 },
+  { id: "viewed", label: "조회", width: 50, align: "center" },
 ];
-
-function createData(title, writtenby, createdat, viewed) {
-  return { title, writtenby, createdat, viewed };
-}
 
 export default function Community() {
   const [page, setPage] = useState(0);
@@ -38,8 +34,10 @@ export default function Community() {
           let _rows = res.data.map((data) => ({
             title: data.title,
             writtenby: data.username,
+            content: data.content,
             createdat: data.date,
-            viewsed: data.viewed,
+            viewed: data.viewed,
+            id: data._id,
           }));
           setRows(rows.concat(_rows));
         })
@@ -86,11 +84,19 @@ export default function Community() {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
                       const value = row[column.id];
-                      return (
+                      return column.id == "title" ? (
+                        <Link to={`/content/${row.id}`} state={{ data: row }}>
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            width={850}
+                          >
+                            {value}
+                          </TableCell>
+                        </Link>
+                      ) : (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                          {value}
                         </TableCell>
                       );
                     })}

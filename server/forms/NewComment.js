@@ -1,23 +1,12 @@
 const mongoose = require("mongoose");
 
-const signupForm = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-  },
+const addNewComment = new mongoose.Schema({
+  contentid: { type: String, require: true },
   username: {
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  salt: {
+  comment: {
     type: String,
     required: true,
   },
@@ -31,4 +20,4 @@ const signupForm = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("signUpTable", signupForm);
+module.exports = mongoose.model("CommentTable", addNewComment);

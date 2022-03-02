@@ -21,8 +21,8 @@ const Login = ({ open, close }) => {
     const reqLogin = async () => {
         const loginURL = "http://localhost:8888/login"
         await axios.post(loginURL, {
-            username: email,
-            password: password
+            email,
+            password
         })
             .then((res) => {
                 if (res.data.data) {
