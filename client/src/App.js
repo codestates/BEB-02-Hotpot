@@ -9,6 +9,7 @@ import Nav from "./components/Nav";
 import Write from "./pages/Write";
 import ConnectWallet from "./components/ConnectWallet";
 import Post from "./pages/Post";
+import MyNFTs from "./pages/MyNFTs";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -47,6 +48,10 @@ function App() {
           element={<Transfer web3={web3} account={account} />}
         />
         <Route path="/content/:id" element={<Post />} />
+        <Route
+          path="/mynfts"
+          element={<MyNFTs web3={web3} account={account} />}
+        />
       </Routes>
     </Router>
   );
