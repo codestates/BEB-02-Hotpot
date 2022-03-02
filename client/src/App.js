@@ -8,6 +8,7 @@ import Transfer from "./pages/Transfer";
 import Nav from "./components/Nav";
 import Write from "./pages/Write";
 import ConnectWallet from "./components/ConnectWallet";
+import Post from "./pages/Post";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           path="/transfer"
           element={<Transfer web3={web3} account={account} />}
         />
+        <Route path="/content/:id" element={<Post />} />
       </Routes>
     </Router>
   );

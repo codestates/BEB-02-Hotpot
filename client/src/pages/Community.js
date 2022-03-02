@@ -21,10 +21,6 @@ const columns = [
   { id: "viewed", label: "조회", width: 50 },
 ];
 
-function createData(title, writtenby, createdat, viewed) {
-  return { title, writtenby, createdat, viewed };
-}
-
 export default function Community() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -38,8 +34,10 @@ export default function Community() {
           let _rows = res.data.map((data) => ({
             title: data.title,
             writtenby: data.username,
+            content: data.content,
             createdat: data.date,
-            viewsed: data.viewed,
+            viewed: data.viewed,
+            id: data._id,
           }));
           setRows(rows.concat(_rows));
         })
@@ -84,16 +82,18 @@ export default function Community() {
               .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
+                    <Link to={`/content/${row.id}`} state={{ data: row }}>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      })}
+                    </Link>
                   </TableRow>
                 );
               })}

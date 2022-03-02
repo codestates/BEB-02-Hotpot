@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const crypto = require('crypto-js');
+const crypto = require("crypto-js");
 const signUpForm = require("../forms/SignupForm");
-const addNewContent = require("../forms/Newcontent");
+const addNewContent = require("../forms/NewContent");
+const addNewComment = require("../forms/NewComment");
 
 router.post("/signup", (req, res) => {
   const { email, username, password, address } = req.body;
   signUpForm.findOne({ username, username }, (err, user) => {
     if (user) {
-      res.send({ message: "이미 존재하는 닉네임입니다.", success: false })
+      res.send({ message: "이미 존재하는 닉네임입니다.", success: false });
     } else {
       signUpForm.findOne({ email: email }, (err, user) => {
         if (user) {
@@ -31,16 +32,14 @@ router.post("/signup", (req, res) => {
             } else {
               res.send({
                 message: "회원가입이 완료되었습니다. 로그인해주세요.",
-                success: true
+                success: true,
               });
             }
           });
         }
       });
     }
-  })
-
-
+  });
 });
 
 router.post("/login", (req, res) => {
@@ -86,10 +85,25 @@ router.post("/newcontent", (req, res) => {
 
 router.get("/", (req, res) => {
   addNewContent.find({}, (err, contents) => {
-    console.log(contents);
     if (err) res.send(err);
     else {
       res.send(contents);
+    }
+  });
+});
+
+router.post("/newcomment", (req, res) => {
+  const { contentid, comment, username } = req.body;
+  const newcomment = new addNewComment({ contentid, username, comment });
+
+  console.log(req.body);
+  newcomment.save((err) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({
+        message: "댓글이 등록되었습니다.",
+      });
     }
   });
 });
