@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut } from "../actions/index";
-import Login from "./Login";
 import { Link } from "react-router-dom";
 import ConnectWallet from "./ConnectWallet";
 
@@ -35,24 +34,23 @@ function Nav({ connectWallet }) {
             회원가입
           </Link>
         </span>
+        <span id="login">
+          {account.isLogin
+            ? (<Link to="/" style={{ textDecoration: "none" }} onClick={() => handleLogout()}>
+              로그아웃
+            </Link>
+            )
+            : (<Link to="/login" style={{ textDecoration: "none" }}>
+              로그인
+            </Link>)
+          }
+        </span>
         <span id="connect-button">
           <button className="nav-button" onClick={() => connectWallet()}>
             지갑 연결
           </button>
         </span>
-        <span id="login">
-          {account.isLogin ? (
-            <button className="nav-button" onClick={() => handleLogout()}>
-              로그아웃
-            </button>
-          ) : (
-            <button className="nav-button" onClick={() => setOpen(true)}>
-              로그인
-            </button>
-          )}
-        </span>
 
-        <Login open={open} close={() => setOpen(!open)} />
         <span>
           <Link to="/transfer" style={{ textDecoration: "none" }}>
             토큰전송
