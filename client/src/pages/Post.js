@@ -16,6 +16,7 @@ const Container = styled.div`
 const Title = styled.div`
   font-size: 2em;
   font-weight: 500;
+  margin-bottom: 0.2em;
 `;
 
 const Contentdiv = styled.div`
