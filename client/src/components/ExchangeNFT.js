@@ -1,5 +1,4 @@
 const ExchangeNFT = ({ post }) => {
-    { console.log(post) }
     return (
         <div className='nft-container'>
             <div className="nft-img ">

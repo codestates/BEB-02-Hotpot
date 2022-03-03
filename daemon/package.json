@@ -1,0 +1,20 @@
+{
+  "name": "daemon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx pm2 start index.js --cron '* * * * *'",
+    "del": "pm2 del all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "mongoose": "^6.2.4",
+    "pm2": "^5.2.0",
+    "web3": "^1.7.0"
+  }
+}

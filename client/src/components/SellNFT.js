@@ -1,12 +1,33 @@
-import { Title } from '@mui/icons-material';
 import { useState } from 'react'
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import axios from "axios";
 
-export default function SellNFT({ nft }) {
+export default function SellNFT({ idx, nft, setNFTlist }) {
+    const account = useSelector((state) => state.accountReducer);
     const [price, setPrice] = useState(0);
 
-    const sellNFT = (tokenId) => {
-        //TODO
+    const sellNFT = async () => {
+        const registerpostURL = "http://localhost:8888/exchange/registerpost"
+        console.log(price)
+        await axios.post(registerpostURL, {
+            seller: account.account.username,
+            seller_address: account.account.address,
+            img_url: nft.tokenURI,
+            price: price,
+            nft_name: `${nft.symbol} #${nft.tokenId}`,
+            //일단 3일로
+            ex_date: function () {
+                let today = new Date();
+                let date = new Date(today.setDate(today.getDate() + 3)).toISOString().split("T")[0];
+                let time = new Date().toTimeString().split(" ")[0];
+                return date + " " + time;
+            }
+        })
+            .then((res) => {
+                alert(res.data.message);
+            })
+            .catch((e) => console.log(e));
     }
 
     const onChangePrice = (e) => {
@@ -65,6 +86,20 @@ export default function SellNFT({ nft }) {
     margin-right: 10px;
     `;
 
+
+    const InputBox = styled.input`
+    margin-right: -4rem;
+    width: 100px;
+    background: #f9f9f9;
+    position: relative;
+    top: 50%;
+    text-align: center;
+    padding-left: 15px;
+    font-size: 1.5rem;
+    height: 2rem;
+    transform: translateY(-50%);
+    `;
+
     const SellBtn = styled.button`
     width: 60px;
     height: 35px;
@@ -89,10 +124,7 @@ export default function SellNFT({ nft }) {
                 </NFTName>
             </NFTInfo>
             <NFTPriceText> Price</NFTPriceText>
-            <input
-                id="price-inputbox"
-                type="number">
-            </input>
+            <InputBox type="number" value={price} onChange={onChangePrice} />
             <SellBtn onClick={sellNFT}> 판매 </SellBtn>
         </Body>
     )

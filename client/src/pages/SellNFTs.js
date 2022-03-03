@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { loadMyNFTs } from "../actions/index";
 import styled from "styled-components";
 import HotNFTAbi from "../HotNFTAbi";
 import SellNFT from "../components/SellNFT";
@@ -8,7 +9,9 @@ const SellNFTs = ({ web3 }) => {
     // 일단은 컨트랙트 하드코딩한거 나중에 변경될수도
     const NFTaddr = "0xCc1108f7c353e5d12DfdeD369ec21C46570afd6D";
     const account = useSelector((state) => state.accountReducer);
-    const [NFTlist, setNFTlist] = useState([]);
+    const nfts = useSelector((state) => state.myNFTReducer);
+    const [isLoading, setisLoading] = useState(true);
+    const dispatch = useDispatch();
 
     const findNFTs = async () => {
         const tokenContract = await new web3.eth.Contract(HotNFTAbi, NFTaddr, {
@@ -18,27 +21,32 @@ const SellNFTs = ({ web3 }) => {
         const symbol = await tokenContract.methods.symbol().call();
         const totalSupply = await tokenContract.methods.totalSupply().call();
 
-        console.log(name);
-        console.log(symbol);
-
         let arr = [];
         for (let i = 1; i <= totalSupply; i++) {
             arr.push(i);
         }
+        const nfts = [];
 
         for (let tokenId of arr) {
             let tokenOwner = await tokenContract.methods.ownerOf(tokenId).call();
-            if (String(tokenOwner).toLowerCase() === account.account.address) {
+            if (String(tokenOwner).toLowerCase() === String(account.account.address).toLowerCase()) {
                 let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
-                setNFTlist((prevState) => {
-                    return [...prevState, { tokenContract, name, symbol, tokenId, tokenURI }];
-                });
-                console.log(NFTlist);
+                const nft = {
+                    tokenContract,
+                    name,
+                    symbol,
+                    tokenId,
+                    tokenURI
+                }
+                nfts.push(nft);
             }
         }
+        dispatch(loadMyNFTs(nfts))
+            .then(setisLoading(false));
     }
 
     useEffect(() => {
+        dispatch(loadMyNFTs([]));
         findNFTs();
     }, []);
 
@@ -47,15 +55,16 @@ const SellNFTs = ({ web3 }) => {
             <Body>
                 <Title>Sell your NFT!</Title>
                 <Wrapper>
-                    {NFTlist.length === 0 ? (
+                    {nfts.nfts.length === 0 ? (
                         <NFTListText>
                             보유한 nft가 없습니다.
                         </NFTListText>
                     ) : (
                         <NFTList>
-                            {NFTlist.map((nft, idx) => {
+                            {nfts.nfts.map((nft, idx) => {
                                 return <SellNFT
                                     key={idx}
+                                    idx={idx}
                                     nft={nft}
                                 />
                             })

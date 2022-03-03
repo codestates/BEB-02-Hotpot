@@ -106,19 +106,6 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0 auto;
 }
 
-#price-inputbox {
-  margin-right: -4rem;
-  width: 100px;
-  background: #f9f9f9;
-  position: relative;
-  top: 50%;
-  text-align: center;
-  padding-left: 15px;
-  font-size: 1.5rem;
-  height: 2rem;
-  transform: translateY(-50%);
-}
-
 .modal-wrapper {
   position: fixed;
   top: 0;
