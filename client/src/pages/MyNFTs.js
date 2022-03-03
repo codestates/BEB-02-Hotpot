@@ -5,6 +5,7 @@ function MyNFTs({ web3, account }) {
   const [NFTlist, setNFTlist] = useState([]);
   //트랜잭션 해쉬값 하드코딩함 -> 입력으로 바꾸거나 hotpot 에서 배포할 컨트랙트 주소 입력
   let NFTaddr = "0xc8118d1957e87df5a14b11355611546d3e5f01ca";
+  const [to, setTo] = useState("");
   const findNFTs = async () => {
     const tokenContract = await new web3.eth.Contract(erc721Abi, NFTaddr, {
       from: account,
@@ -28,6 +29,19 @@ function MyNFTs({ web3, account }) {
       }
     }
   };
+  const sendNFT = async (NFTAddr, tokenId) => {
+    const tokenContract = await new web3.eth.Contract(erc721Abi, NFTAddr, {
+      from: account,
+    });
+    tokenContract.methods
+      .transferFrom(account, to, tokenId)
+      .send({
+        from: account,
+      })
+      .on("receipt", (receipt) => {
+        setTo("");
+      });
+  };
   return (
     <div className="NFTs">
       <button className="findbtn" onClick={findNFTs}>
@@ -36,11 +50,30 @@ function MyNFTs({ web3, account }) {
       <div className="NFTlist">
         {NFTlist.map((token) => {
           return (
-            <div className="NFTtoken">
-              <div className="name">Name: {token.name}</div>
-              {/* <span className="symbol">{token.symbol}</span>) */}
-              {/* <div className="nft">id: {token.tokenId}</div> */}
-              <img src={token.tokenURI} width={300} alt="NFTimg" />
+            <div>
+              <div className="NFTtoken">
+                <div className="name">Name: {token.name}</div>
+                {/* <span className="symbol">{token.symbol}</span>) */}
+                {/* <div className="nft">id: {token.tokenId}</div> */}
+                <img src={token.tokenURI} width={300} alt="NFTimg" />
+              </div>
+              <div className="tokenTransfer">
+                <input
+                  class="recipientaddr"
+                  type="text"
+                  placeholder="recipient address"
+                  value={to}
+                  onChange={(e) => {
+                    setTo(e.target.value);
+                  }}
+                ></input>
+                <button
+                  className="sendNFTbtn"
+                  onClick={sendNFT.bind(this, token.address, token.tokenId)}
+                >
+                  send NFT
+                </button>
+              </div>
             </div>
           );
         })}
