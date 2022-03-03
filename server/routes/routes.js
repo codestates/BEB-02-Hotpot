@@ -96,7 +96,6 @@ router.post("/newcomment", (req, res) => {
   const { contentid, comment, username } = req.body;
   const newcomment = new addNewComment({ contentid, username, comment });
 
-  console.log(req.body);
   newcomment.save((err) => {
     if (err) {
       res.send(err);
@@ -114,6 +113,18 @@ router.get("/content/:id", (req, res) => {
     if (err) res.send(err);
     else {
       res.send(contents);
+    }
+  });
+});
+
+router.put("/", (req, res) => {
+  const { data } = req.body;
+  let mongoose = require("mongoose");
+  let id = mongoose.Types.ObjectId(data.id);
+
+  addNewContent.updateOne({ _id: id }, { $inc: { viewed: 1 } }, (err) => {
+    if (err) {
+      res.send(err);
     }
   });
 });

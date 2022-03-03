@@ -55,6 +55,13 @@ export default function Community() {
     setPage(0);
   };
 
+  async function increaseview(info) {
+    await axios
+      .put("http://localhost:8888/", { data: info })
+      .then()
+      .catch((e) => console.log(e));
+  }
+
   return (
     <Paper>
       <h3>커뮤니티 페이지</h3>
@@ -85,7 +92,11 @@ export default function Community() {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return column.id == "title" ? (
-                        <Link to={`/content/${row.id}`} state={{ data: row }}>
+                        <Link
+                          to={`/content/${row.id}`}
+                          state={{ data: row }}
+                          onClick={() => increaseview(row)}
+                        >
                           <TableCell
                             key={column.id}
                             align={column.align}
