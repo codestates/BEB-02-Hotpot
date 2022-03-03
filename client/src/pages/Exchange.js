@@ -31,7 +31,9 @@ export default function Exchange() {
     <div id="exchange-body">
       <h1 id="head-title">Exchange your NFT! </h1>
       <nav id="exchange-nav-container">
-        <button id="sell-nft-button">NFT 판매</button>
+        <Link to="/sellnft">
+          <button id="sell-nft-button">NFT 판매</button>
+        </Link>
         <Link to="/mynfts" style={{ textDecoration: "none" }}>
           <button>My NFT</button>
         </Link>

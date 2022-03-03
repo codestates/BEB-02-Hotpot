@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { logIn } from '../actions/index';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const Login = () => {
-    const account = useSelector(state => state.accountReducer);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
@@ -31,6 +30,7 @@ const Login = () => {
             .then((res) => {
                 if (res.data.data) {
                     dispatch(logIn(res.data.data));
+                    console.log(res.data.data);
                     navigate('/');
                 } else {
                     alert(res.data.message);
