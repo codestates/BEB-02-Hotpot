@@ -15,6 +15,7 @@ export default function SellNFT({ idx, nft, setNFTlist }) {
             seller_address: account.account.address,
             img_url: nft.tokenURI,
             price: price,
+            tokenId: nft.tokenId,
             nft_name: `${nft.symbol} #${nft.tokenId}`,
             //일단 3일로
             ex_date: function () {

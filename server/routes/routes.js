@@ -126,35 +126,37 @@ router.get("/content/:id", (req, res) => {
 });
 
 router.post("/recordTx", (req, res) => {
-  const { hash } = req.body;
-  transactionForm.findOne({ hash: hash }, (err, tx) => {
-    if (tx) {
-      res.send({ message: "이미 기록된 트랜잭션입니다." });
-    } else {
-      web3.eth.getTransaction(hash)
-        .then(async (info) => {
-          const { hash, nonce, from, to, value, gas, gasPrice, input, v, r, s } = info;
-          const newTx = new transactionForm({
-            hash, nonce, from, to, value, gas, gasPrice, input, v, r, s,
-            blockHash: "pending",
-            blockNumber: 0,
-            transactionIndex: 0,
-            status: "pending"
-          })
+  const { hash, type } = req.body;
+  if (hash) {
+    transactionForm.findOne({ hash: hash }, (err, tx) => {
+      if (tx) {
+        res.send({ message: "이미 기록된 트랜잭션입니다." });
+      } else {
 
-          newTx.save((err) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send({
-                message: "트랜잭션이 기록되었습니다.",
-                data: newTx,
-              });
-            }
-          });
-        })
-    }
-  })
+        web3.eth.getTransaction(hash)
+          .then(async (info) => {
+
+            const { hash, nonce, from, to, value, gas, gasPrice, input, v, r, s, exchangeId } = info;
+
+            const newTx = new transactionForm({
+              hash, nonce, from, to, value, gas, gasPrice, input, v, r, s, type, exchangeId,
+              status: "pending"
+            })
+
+            newTx.save((err) => {
+              if (err) {
+                res.send(err);
+              } else {
+                res.send({
+                  message: "트랜잭션이 기록되었습니다.",
+                  data: newTx,
+                });
+              }
+            });
+          })
+      }
+    })
+  }
 })
 
 router.put("/", (req, res) => {
