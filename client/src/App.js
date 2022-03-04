@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Write from "./pages/Write";
 import ConnectWallet from "./components/ConnectWallet";
 import Post from "./pages/Post";
+import SellNFTs from "./pages/SellNFTs";
 import MyNFTs from "./pages/MyNFTs";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -50,6 +51,7 @@ function App() {
           element={<Transfer web3={web3} account={account} />}
         />
         <Route path="/content/:id" element={<Post />} />
+        <Route path="/sellnft" element={<SellNFTs web3={web3} />} />
         <Route
           path="/mynfts"
           element={<MyNFTs web3={web3} account={account} />}
