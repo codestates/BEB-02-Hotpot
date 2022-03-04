@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Transfer({ web3, account }) {
   const fromAddress = account;
@@ -31,31 +32,40 @@ function Transfer({ web3, account }) {
   };
   return (
     <div className="TransferToken">
-      <input
-        type="text"
-        placeholder="recipient address"
-        value={toAddress}
-        onChange={(e) => {
-          setToAddress(e.target.value);
-        }}
-      ></input>
-      <input
-        className="Amount"
-        type="text"
-        placeholder="amount"
-        value={amount}
-        onChange={(e) => {
-          setAmount(e.target.value);
-        }}
-      ></input>
-      <button
-        className="sendTokenBtn"
-        onClick={() => {
-          sendToken();
-        }}
-      >
-        send Token
-      </button>
+      <div>
+        <input
+          type="text"
+          placeholder="recipient address"
+          value={toAddress}
+          onChange={(e) => {
+            setToAddress(e.target.value);
+          }}
+        ></input>
+        <input
+          className="Amount"
+          type="text"
+          placeholder="amount"
+          value={amount}
+          onChange={(e) => {
+            setAmount(e.target.value);
+          }}
+        ></input>
+        <button
+          className="sendTokenBtn"
+          onClick={() => {
+            sendToken();
+          }}
+        >
+          send Token
+        </button>
+      </div>
+      <div>
+        <button id="rewardbtn" style={{ background: "#8977ad" }}>
+          <Link to="/reward" style={{ textDecoration: "none" }}>
+            eth faucet
+          </Link>
+        </button>
+      </div>
     </div>
   );
 }

@@ -5,9 +5,10 @@ import Community from "./pages/Community";
 import SignUp from "./pages/Signup";
 import Exchange from "./pages/Exchange";
 import Transfer from "./pages/Transfer";
-import Nav from "./components/Nav"
+import Nav from "./components/Nav";
 import Login from "./pages/Login";
 import Write from "./pages/Write";
+import Reward from "./pages/reward";
 import ConnectWallet from "./components/ConnectWallet";
 import Post from "./pages/Post";
 import SellNFTs from "./pages/SellNFTs";
@@ -56,6 +57,7 @@ function App() {
           path="/mynfts"
           element={<MyNFTs web3={web3} account={account} />}
         />
+        <Route path="/reward" element={<Reward account={account} />} />
       </Routes>
     </Router>
   );
