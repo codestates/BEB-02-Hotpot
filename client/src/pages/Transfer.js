@@ -1,11 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
+import { erc20Abi, erc20Addr } from '../erc20Contract';
+import axios from 'axios';
 
-function Transfer({ web3, account }) {
-  const fromAddress = account;
+function Transfer({ web3, account, connectWallet }) {
+  const accountState = useSelector((state) => state.accountReducer);
+  const fromAddress = accountState.account.address;
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
+  const recordTxURL = "http://localhost:8888/recordTx";
 
-  const sendToken = async () => {
+  useEffect(() => {
+    connectWallet();
+  }, []);
+
+
+  async function getBalance(address) {
+    try {
+      const contract = new web3.eth.Contract(erc20Abi, erc20Addr);
+      const balance = await contract.methods.balanceOf(address).call();
+      console.log('잔액' + balance);
+      return balance;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
+
+  const sendToken = async (toAddress, amount) => {
+    const contract = new web3.eth.Contract(erc20Abi, erc20Addr);
+    console.log(toAddress);
+    console.log(fromAddress);
+    getBalance(fromAddress);
+    if (!toAddress) {
+      alert("전송할 주소를 입력해주세요.");
+    } else if (!fromAddress) {
+      alert("로그인 해주세요.")
+    } else {
+      const result = await contract.methods.transfer(toAddress, parseInt(amount)).send(
+        { from: fromAddress, gasPrice: 2352340696, gas: 60000 },
+        function (err, txhash) {
+          try {
+            axios.post(recordTxURL, { hash: txhash })
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((e) => console.log(e));
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      )
+    }
+    /*
     console.log(fromAddress);
     var nonce = web3.utils.toHex(web3.eth.getTransactionCount(fromAddress));
     var gasPrice = web3.utils.toHex(web3.eth.gasPrice);
@@ -28,7 +75,7 @@ function Transfer({ web3, account }) {
     var transactionHash = web3.utils.toHex(web3.eth.sendTransaction(txObject));
     console.log("transactionHash, etherscan에서 검색 : ", transactionHash);
     alert(transactionHash);
-  };
+  */};
   return (
     <div className="TransferToken">
       <input
@@ -51,7 +98,7 @@ function Transfer({ web3, account }) {
       <button
         className="sendTokenBtn"
         onClick={() => {
-          sendToken();
+          sendToken(toAddress, amount);
         }}
       >
         send Token
