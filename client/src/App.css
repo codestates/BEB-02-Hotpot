@@ -212,33 +212,6 @@ input[type="number"]::-webkit-inner-spin-button {
   flex-wrap: wrap;
 }
 
-.nft-cards-wrap .nft-container {
-  width: calc(25% - 44px);
-  margin-right: 44px;
-  margin-bottom: 56px;
-}
-
-.nft-img {
-  width: 100%;
-  padding-top: 100%;
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  background-color: #f8f9fa;
-  box-shadow: inset 0px 0px 0px 1px rgb(0 0 0 / 15%);
-  box-sizing: border-box;
-}
-
-.nft-img img {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 12px;
-  border: 1px solid transparent;
-}
-
 .join-content {
   overflow: hidden;
   width: 100%;
