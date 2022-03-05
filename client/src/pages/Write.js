@@ -30,7 +30,7 @@ const Enter = styled.button`
   display: flex;
 `;
 
-export default function Write() {
+export default function Write({ useraddress }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const navigate = useNavigate();
@@ -58,6 +58,7 @@ export default function Write() {
         .then((res) => {
           console.log(res.data);
           alert(res.data.message);
+          reward();
           navigate("/");
         });
     } else if (!account.account.username)
@@ -65,6 +66,29 @@ export default function Write() {
     else {
       alert("제목과 내용을 입력해주세요.");
     }
+  };
+
+  const reward = async () => {
+    if (!useraddress) {
+      alert("보상실패 : 지갑연결을 먼저 해주세요.");
+      return;
+    }
+    const rewardURL = "http://localhost:8888/reward";
+    console.log("reward useraddress: ", useraddress);
+    await axios
+      .post(rewardURL, {
+        useraddress: useraddress,
+        rewardtype: "content",
+      })
+      .then((res) => {
+        if (res.data.data) {
+          console.log(res.data.data);
+          alert("글쓰기 보상으로 4 토큰을 지급하였습니다.");
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((e) => console.log(e));
   };
 
   return (

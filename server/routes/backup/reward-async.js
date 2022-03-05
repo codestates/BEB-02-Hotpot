@@ -33,7 +33,7 @@ router.post("/reward", async (req, res) => {
     amount = "4";
   }
   // users 테이블(서버의 계정주소와 프라이빗키가 저장되어 있는 테이블) 검색
-  const server_info = await ethFaucetForm.findOne({ server: "server" });
+  const server_info = await ethFaucetForm.findOne({ username: "server" });
   if (server_info) {
     //1. ERC20 토큰을 배포한 네트워크 주소
     web3 = new Web3(
@@ -68,32 +68,32 @@ router.post("/reward", async (req, res) => {
     var rawTransaction = { to: contractAddress, gas: 100000, data: data };
 
     //7. 생성된 token transaction 실행
-    web3.eth.accounts
+    const result = web3.eth.accounts
       .signTransaction(rawTransaction, privateKey)
       .then((signedTx) =>
         web3.eth.sendSignedTransaction(signedTx.rawTransaction)
-      )
-      .then((req) => {
-        /* The trx was done. Write your acctions here. For example getBalance */
-        console.log("전송결과 : ", req);
-        getTOKENBalanceOf(ownerAddress).then((balance) => {
-          console.log(`[전송 후] 서버 토큰 수 : ${balance}`);
-        });
-        getTOKENBalanceOf(toAddress).then((balance) => {
-          console.log(`[전송 후] 사용자 토큰 수 : ${balance}`);
-        });
-        const txHash = req.transactionHash;
-        console.log("토큰 트랜잭션 해시 :" + txHash);
-        res.send({
-          message: "토큰전송 성공",
-          data: {
-            //username: server_info.userName, // 사용자 이름
-            address: toAddress, // 사용자의 주소
-            balance: balance, // 사용자 이더 잔액
-            txHash: txHash, // 토큰 트랜잭션 해시
-          },
-        });
-      });
+      );
+    //.then((req) => {
+    /* The trx was done. Write your acctions here. For example getBalance */
+    console.log("전송결과 : ", result);
+    getTOKENBalanceOf(ownerAddress).then((balance) => {
+      console.log(`[전송 후] 서버 토큰 수 : ${balance}`);
+    });
+    getTOKENBalanceOf(toAddress).then((balance) => {
+      console.log(`[전송 후] 사용자 토큰 수 : ${balance}`);
+    });
+    const txHash = result.transactionHash;
+    console.log("토큰 트랜잭션 해시 :" + txHash);
+    res.send({
+      message: "토큰전송 성공",
+      data: {
+        //username: server_info.userName, // 사용자 이름
+        address: toAddress, // 사용자의 주소
+        balance: balance, // 사용자 이더 잔액
+        txHash: txHash, // 토큰 트랜잭션 해시
+      },
+    });
+    // });
   }
 });
 
