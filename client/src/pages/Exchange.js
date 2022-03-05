@@ -6,7 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-export default function Exchange() {
+export default function Exchange({ web3, connectWallet }) {
   const [loadingComplete, isloadingComplete] = useState(false);
   const posts = useSelector((state) => state.exchangeReducer);
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ export default function Exchange() {
       </nav>
       <section className="nft-cards-wrap">
         {posts.posts.map((post, idx) => (
-          <ExchangeNFT post={post} key={idx} />
+          <ExchangeNFT post={post} key={idx} web3={web3} connectWallet={connectWallet} />
         ))}
       </section>
     </div>
