@@ -43,7 +43,7 @@ function App() {
         <Route path="/" element={<Community />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp account={account} />} />
-        <Route path="/exchange" element={<Exchange />} />
+        <Route path="/exchange" element={<Exchange web3={web3} connectWallet={connectWallet} />} />
         <Route path="/write" element={<Write />} />
         <Route
           path="/transfer"

@@ -19,7 +19,7 @@ const exchangeForm = new mongoose.Schema({
     },
     trade_state: {
         type: String,
-        required: true,
+        default: "판매중",
     },
     nft_name: {
         type: String,
@@ -33,6 +33,11 @@ const exchangeForm = new mongoose.Schema({
             let time = new Date().toTimeString().split(" ")[0];
             return date + " " + time;
         },
+    },
+
+    tokenId: {
+        type: Number,
+        required: true,
     },
     createAt: {
         type: Date,
