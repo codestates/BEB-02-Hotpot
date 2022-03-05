@@ -65,7 +65,7 @@ const transactionForm = new mongoose.Schema({
         type: String,
         required: true,
     },
-    exchangeId: {
+    tokenId: {
         type: Number,
         default: 0
     }

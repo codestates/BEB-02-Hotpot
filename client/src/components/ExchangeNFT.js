@@ -1,15 +1,10 @@
-import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useSelector } from 'react-redux';
 import { erc20Abi, erc20Addr } from '../erc20Contract';
 import axios from 'axios';
 
-const ExchangeNFT = ({ web3, post, connectWallet }) => {
+const ExchangeNFT = ({ web3, post }) => {
     const accountState = useSelector((state) => state.accountReducer);
-
-    function getBalance(address) {
-
-    }
 
     const buyNFT = async () => {
         const contract = new web3.eth.Contract(erc20Abi, erc20Addr);
@@ -28,7 +23,7 @@ const ExchangeNFT = ({ web3, post, connectWallet }) => {
                             { from: fromAddress, gasPrice: 2352340696, gas: 60000 },
                             (err, txhash) => {
                                 try {
-                                    axios.post(recordTxURL, { hash: txhash, type: "buyNFT", exchangeId: post.tokenId })
+                                    axios.post(recordTxURL, { hash: txhash, type: "buyNFT", tokenId: post.tokenId })
                                         .then((res) => {
                                             console.log(res.data);
                                         })
@@ -85,10 +80,6 @@ const ExchangeNFT = ({ web3, post, connectWallet }) => {
     `;
     const State = styled.div`
     `;
-
-    useEffect(() => {
-        connectWallet();
-    }, []);
 
     return (
         <Container onClick={() => buyNFT()}>

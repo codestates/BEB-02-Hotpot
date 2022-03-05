@@ -52,7 +52,7 @@ function Nav({ connectWallet }) {
         </span>
 
         <span>
-          <Link to="/transfer" style={{ textDecoration: "none" }} onClick={() => connectWallet()}>
+          <Link to="/transfer" style={{ textDecoration: "none" }} >
             토큰전송
           </Link>
         </span>
