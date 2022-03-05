@@ -82,17 +82,30 @@ const SellBtn = styled.button`
 export default function SellNFT({ nft, web3 }) {
   const account = useSelector((state) => state.accountReducer);
   const [price, setPrice] = useState();
+  const recordTxURL = "http://localhost:8888/recordTx";
+  const registerpostURL = "http://localhost:8888/exchange/registerpost";
+
 
   const sellNFT = async () => {
     const NFTaddr = "0xCc1108f7c353e5d12DfdeD369ec21C46570afd6D";
     const contract = await new web3.eth.Contract(HotNFTAbi, NFTaddr);
     await contract.methods
       .approve("0x78bbc7331640d03fe0287d6aa8a623a0edc4daa4", `${nft.tokenId}`)
-      .send({ from: account.account.address });
+      .send({ from: account.account.address }, (err, txhash) => {
+        try {
+          axios.post(recordTxURL, { hash: txhash, type: "sellNFT", tokenId: nft.tokenId })
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((e) => console.log(e));
+        } catch (e) {
+          console.log(e);
+        }
+      });
 
     if (price) {
       await axios
-        .post("http://localhost:8888/exchange/registerpost", {
+        .post(registerpostURL, {
           seller: account.account.username,
           seller_address: account.account.address,
           img_url: nft.tokenURI,

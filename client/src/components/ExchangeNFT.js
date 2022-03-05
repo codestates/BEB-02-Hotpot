@@ -7,37 +7,43 @@ const ExchangeNFT = ({ web3, post }) => {
     const accountState = useSelector((state) => state.accountReducer);
 
     const buyNFT = async () => {
-        const contract = new web3.eth.Contract(erc20Abi, erc20Addr);
-        const toAddress = post.seller_address;
-        const amount = post.price * Math.pow(10, 18);
-        const recordTxURL = "http://localhost:8888/recordTx";
+        //판매중인 NFT만 구매 가능하도록
+        if (post.trade_state === "판매중") {
+            const contract = new web3.eth.Contract(erc20Abi, erc20Addr);
+            const toAddress = post.seller_address;
+            const amount = post.price * Math.pow(10, 18);
+            const buyNFTURL = "http://localhost:8888/exchange/buyNFT";
 
-        if (accountState.isLogin) {
-            const fromAddress = accountState.account.address;
-            const balance = contract.methods.balanceOf(fromAddress).call()
-                .then((bal) => {
-                    if (amount >= Number(bal)) {
-                        alert("잔액이 부족합니다.")
-                    } else {
-                        const result = contract.methods.transfer(toAddress, String(amount)).send(
-                            { from: fromAddress, gasPrice: 2352340696, gas: 60000 },
-                            (err, txhash) => {
-                                try {
-                                    axios.post(recordTxURL, { hash: txhash, type: "buyNFT", tokenId: post.tokenId })
-                                        .then((res) => {
-                                            console.log(res.data);
-                                        })
-                                        .catch((e) => console.log(e));
-                                } catch (e) {
-                                    console.log(e);
+            if (accountState.isLogin) {
+                const fromAddress = accountState.account.address;
+                const balance = contract.methods.balanceOf(fromAddress).call()
+                    .then((bal) => {
+                        if (amount >= Number(bal)) {
+                            alert("잔액이 부족합니다.")
+                        } else {
+                            const result = contract.methods.transfer(toAddress, String(amount)).send(
+                                { from: fromAddress, gasPrice: 2352340696, gas: 60000 },
+                                (err, txhash) => {
+                                    try {
+                                        axios.post(buyNFTURL, { seller_address: toAddress, buyer_address: fromAddress, hash: txhash, type: "buyNFT", tokenId: post.tokenId })
+                                            .then((res) => {
+                                                console.log(res.data);
+                                            })
+                                            .catch((e) => console.log(e));
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
                                 }
-                            }
-                        )
-                    }
-                });
+                            )
+                        }
+                    });
+
+            } else {
+                alert("로그인을 해주세요.")
+            }
 
         } else {
-            alert("로그인을 해주세요.")
+            alert(`현재 이 NFT는 ${post.trade_state} 입니다.`)
         }
 
     }
