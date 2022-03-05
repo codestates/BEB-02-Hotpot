@@ -24,7 +24,7 @@ const Contentdiv = styled.div`
   margin-bottom: 2em;
 `;
 
-export default function Post() {
+export default function Post({ account }) {
   const location = useLocation();
   const data = location.state.data;
 
@@ -47,7 +47,7 @@ export default function Post() {
         })}
       </Contentdiv>
       <Divider />
-      <NewComment contentid={data.id} />
+      <NewComment contentid={data.id} useraddress={account} />
       <CommentsList contentid={data.id} />
     </Container>
   );

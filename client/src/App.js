@@ -35,6 +35,8 @@ function App() {
       method: "eth_requestAccounts",
     });
     setAccount(accounts[0]);
+    console.log(accounts[0]);
+    alert(accounts[0]);
   };
   return (
     <Router>
@@ -44,12 +46,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp account={account} />} />
         <Route path="/exchange" element={<Exchange />} />
-        <Route path="/write" element={<Write />} />
+        <Route path="/write" element={<Write useraddress={account} />} />
         <Route
           path="/transfer"
-          element={<Transfer web3={web3} account={account} connectWallet={connectWallet} />}
+          element={<Transfer web3={web3} account={account} />}
         />
-        <Route path="/content/:id" element={<Post />} />
+        <Route path="/content/:id" element={<Post account={account} />} />
         <Route path="/sellnft" element={<SellNFTs web3={web3} />} />
         <Route
           path="/mynfts"
