@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { erc20Abi, erc20Addr } from '../erc20Contract';
 import axios from 'axios';
 
-function Transfer({ web3, account, connectWallet }) {
+function Transfer({ web3, account }) {
   const accountState = useSelector((state) => state.accountReducer);
   const fromAddress = accountState.account.address;
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
   const recordTxURL = "http://localhost:8888/recordTx";
-
-  useEffect(() => {
-    connectWallet();
-  }, []);
-
 
   async function getBalance(address) {
     try {
@@ -37,12 +32,17 @@ function Transfer({ web3, account, connectWallet }) {
       alert("전송할 주소를 입력해주세요.");
     } else if (!fromAddress) {
       alert("로그인 해주세요.")
-    } else {
-      const result = await contract.methods.transfer(toAddress, parseInt(amount)).send(
+    } else if (!account) {
+      alert("지갑을 연결해주세요")
+    } else if (fromAddress !== account) {
+      alert(`등록된 지갑(${fromAddress})과 연결된 지갑(${account})이 다릅니다.`)
+    }
+    else {
+      const result = await contract.methods.transfer(toAddress, String(amount * Math.pow(10, 18))).send(
         { from: fromAddress, gasPrice: 2352340696, gas: 60000 },
         function (err, txhash) {
           try {
-            axios.post(recordTxURL, { hash: txhash })
+            axios.post(recordTxURL, { hash: txhash, type: "sendToken" })
               .then((res) => {
                 console.log(res.data);
               })
@@ -60,22 +60,22 @@ function Transfer({ web3, account, connectWallet }) {
     var value = web3.utils.toWei(amount, "ether");
     var gasLimit = web3.utils.toHex(
       web3.eth.estimateGas({
-        to: toAddress,
+          to: toAddress,
         from: fromAddress,
         value: value,
       })
-    );
-    var txObject = {
-      nonce: nonce,
-      gasPrice: gasPrice,
-      gasLimit: gasLimit,
-      to: toAddress,
-      from: fromAddress,
-      value: value,
+        );
+        var txObject = {
+          nonce: nonce,
+        gasPrice: gasPrice,
+        gasLimit: gasLimit,
+        to: toAddress,
+        from: fromAddress,
+        value: value,
     };
-    var transactionHash = web3.utils.toHex(web3.eth.sendTransaction(txObject));
-    console.log("transactionHash, etherscan에서 검색 : ", transactionHash);
-    alert(transactionHash);
+        var transactionHash = web3.utils.toHex(web3.eth.sendTransaction(txObject));
+        console.log("transactionHash, etherscan에서 검색 : ", transactionHash);
+        alert(transactionHash);
   */};
   return (
     <div className="TransferToken">

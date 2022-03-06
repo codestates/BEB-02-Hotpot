@@ -11,15 +11,15 @@ const transactionForm = new mongoose.Schema({
     },
     blockHash: {
         type: String,
-        required: true,
+        default: "",
     },
     blockNumber: {
         type: Number,
-        required: true,
+        default: 0,
     },
     transactionIndex: {
         type: Number,
-        required: true,
+        default: 0,
     },
     from: {
         type: String,
@@ -60,6 +60,14 @@ const transactionForm = new mongoose.Schema({
     status: {
         type: String,
         required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+    },
+    tokenId: {
+        type: Number,
+        default: 0
     }
 });
 

@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require("crypto-js");
+const dotenv = require("dotenv");
+const Web3 = require("web3");
 const signUpForm = require("../forms/SignupForm");
 const addNewContent = require("../forms/NewContent");
 const addNewComment = require("../forms/NewComment");
+const transactionForm = require("../forms/transactionForm");
+dotenv.config();
+
+const rpcURL = process.env.RPC_URL;
+const web3 = new Web3(rpcURL);
 
 router.post("/signup", (req, res) => {
   const { email, username, password, address } = req.body;
@@ -122,9 +129,8 @@ router.get("/content/:id", (req, res) => {
   });
 });
 
-
 router.post("/recordTx", (req, res) => {
-  const { hash, type } = req.body;
+  const { hash, type, tokenId } = req.body;
   if (hash) {
     transactionForm.findOne({ hash: hash }, (err, tx) => {
       if (tx) {
@@ -134,10 +140,10 @@ router.post("/recordTx", (req, res) => {
         web3.eth.getTransaction(hash)
           .then(async (info) => {
 
-            const { hash, nonce, from, to, value, gas, gasPrice, input, v, r, s, exchangeId } = info;
+            const { hash, nonce, from, to, value, gas, gasPrice, input, v, r, s, } = info;
 
             const newTx = new transactionForm({
-              hash, nonce, from, to, value, gas, gasPrice, input, v, r, s, type, exchangeId,
+              hash, nonce, from, to, value, gas, gasPrice, input, v, r, s, type, tokenId,
               status: "pending"
             })
 
